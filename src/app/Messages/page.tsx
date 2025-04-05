@@ -320,10 +320,10 @@ const Messages: React.FC = () => {
             {/* Message Input */}
             <div className="bg-white border-t border-gray-200 p-4">
               <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
-                <div className="relative">
+                <div className="relative z-10">
                   <button 
                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                    className="text-gray-500 hover:text-teal-500 transition"
+                    className="p-2 text-gray-500 hover:text-teal-500 transition cursor-pointer"
                     type="button"
                   >
                     <Paperclip size={20} />
@@ -366,11 +366,11 @@ const Messages: React.FC = () => {
                   autoFocus
                 />
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 z-10">
                   <div className="relative">
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-gray-500 hover:text-teal-500 transition mr-2"
+                      className="p-2 text-gray-500 hover:text-teal-500 transition cursor-pointer"
                       type="button"
                     >
                       <Smile size={20} />
@@ -400,8 +400,8 @@ const Messages: React.FC = () => {
                     className={`p-2 rounded-full ${
                       messageInput.trim() 
                         ? 'bg-teal-500 text-white hover:bg-teal-600' 
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    } transition`}
+                        : 'bg-gray-300 text-gray-500'
+                    } transition cursor-pointer`}
                     disabled={!messageInput.trim()}
                     type="button"
                   >
