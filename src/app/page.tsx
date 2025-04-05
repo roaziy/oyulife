@@ -14,7 +14,6 @@ export default function Home() {
     name: "Lisa",
     imageUrl: "/api/placeholder/100/100"
   }));
-  const images = [Tinder, Tinder, Tinder];
 
   const prevImage = () => {
     setCurrent(current === 0 ? images.length - 1 : current - 1);
