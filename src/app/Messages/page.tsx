@@ -8,7 +8,7 @@ const mockConversations = [
   {
     id: '1',
     name: 'Emma Thompson',
-    avatar: '../../../public/images/profiles/story/profile.jpg',
+    avatar: '/images/profiles/story/profile.jpg', // Fixed path to be absolute from public directory
     lastMessage: 'That sounds great! Let me check my schedule',
     timestamp: new Date(Date.now() - 1000 * 60 * 5),
     unread: 2,
@@ -17,7 +17,7 @@ const mockConversations = [
   {
     id: '2',
     name: 'James Wilson',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Did you see the latest research paper?',
     timestamp: new Date(Date.now() - 1000 * 60 * 30),
     unread: 0,
@@ -26,7 +26,7 @@ const mockConversations = [
   {
     id: '3',
     name: 'Sarah Parker',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Let\'s schedule a call to discuss the project',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
     unread: 0,
@@ -35,7 +35,7 @@ const mockConversations = [
   {
     id: '4',
     name: 'Michael Brown',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Thanks for sharing your insights!',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
     unread: 0,
@@ -44,7 +44,7 @@ const mockConversations = [
   {
     id: '5',
     name: 'Community Forum',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'New topics are available in your field',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48),
     unread: 1,
@@ -215,7 +215,7 @@ const Messages: React.FC = () => {
                 className={`flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition ${activeConversation === conv.id ? 'bg-gray-100' : ''}`}
                 onClick={() => setActiveConversation(conv.id)}
               >
-                <div className="relative flex flex-col-2">
+                <div className="relative flex w-full flex-col-2">
                   <Image 
                     src={conv.avatar} 
                     alt={conv.name}
@@ -324,6 +324,7 @@ const Messages: React.FC = () => {
                   <button 
                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
                     className="text-gray-500 hover:text-teal-500 transition"
+                    type="button"
                   >
                     <Paperclip size={20} />
                   </button>
@@ -357,17 +358,20 @@ const Messages: React.FC = () => {
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
                       handleSendMessage();
                     }
                   }}
+                  autoFocus
                 />
                 
                 <div className="flex items-center space-x-2">
                   <div className="relative">
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-gray-500 px-28 hover:text-teal-500 transition"
+                      className="text-gray-500 hover:text-teal-500 transition mr-2"
+                      type="button"
                     >
                       <Smile size={20} />
                     </button>
@@ -399,6 +403,7 @@ const Messages: React.FC = () => {
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     } transition`}
                     disabled={!messageInput.trim()}
+                    type="button"
                   >
                     <Send size={18} />
                   </button>
