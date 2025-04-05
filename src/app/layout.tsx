@@ -35,7 +35,7 @@ function RootLayoutClient({
     <html lang="en">
       <body className="flex flex-col md:flex-row">
         {/* NavBar - fixed on mobile, side column on desktop */}
-        <div className="md:w-0 flex-shrink-0">
+        <div className="md:w-0 fixed flex-shrink-0">
           <NavBar />
         </div>
         
