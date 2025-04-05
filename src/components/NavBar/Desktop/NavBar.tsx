@@ -75,14 +75,19 @@ const NavBar = () => {
                 <div className="flex items-center gap-3 bg-gray-100 rounded-full py-2 px-3 select-none" draggable="false">
                     <Image
                         className="h-8 w-8 rounded-full object-cover"
-                        src="/images/DesktopNavbar/user.png"
+                        src="/images/profiles/story/profile.jpg"
                         alt="User profile"
                         width={32}
                         height={32}
                     />
                     <div className="flex-1">
+                        <Link  key={999999} 
+                                href={"/profile"} 
+                                className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition"
+                                onClick={() => setIsOpen(false)}>
                         <p className="text-sm font-semibold">Stas Neprokin</p>
-                        <p className="text-xs text-gray-400">@sneprokin</p>
+                        <p className="text-xs text-gray-400">@sneprokin</p> 
+                        </Link>
                     </div>
                     <MoreHorizontal className="text-gray-500 cursor-pointer" />
                 </div>
