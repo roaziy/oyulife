@@ -20,7 +20,7 @@ const NavBar = () => {
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Compass /> Explore
                     </Link>
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/notification" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Bell /> Notifications
                     </Link>
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
