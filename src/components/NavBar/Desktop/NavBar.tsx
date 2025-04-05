@@ -23,7 +23,7 @@ const NavBar = () => {
     ];
 
     return (
-        <div className='z-[1000]'>
+        <div className='z-[1000] fixed top-0 left-0 w-full h-screen md:h-auto md:w-64 bg-white shadow-md'>
             {/* Mobile hamburger button */}
             <div className="md:hidden fixed top-4 left-4 z-50">
                 <button 

@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Paperclip, Smile, Send, MoreVertical, Phone, Video, Image as ImageIcon, FileText, Mic } from 'lucide-react';
+import { Search, Paperclip, Smile, Send, MoreVertical, Phone, Video, Image as ImageIcon, FileText, Mic, Menu, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
 // Mock data for conversations
@@ -107,20 +107,44 @@ const Messages: React.FC = () => {
   const [messageInput, setMessageInput] = useState<string>('');
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [showAttachmentMenu, setShowAttachmentMenu] = useState<boolean>(false);
+  const [showSidebar, setShowSidebar] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   
   const messageEndRef = useRef<HTMLDivElement>(null);
   const attachmentMenuRef = useRef<HTMLDivElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
   
+  // Check screen size on mount and resize
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setShowSidebar(!mobile);
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add event listener for resize
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
   // Auto-scroll to bottom of messages
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Close attachment menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (attachmentMenuRef.current && !attachmentMenuRef.current.contains(event.target as Node)) {
         setShowAttachmentMenu(false);
+      }
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+        setShowEmojiPicker(false);
       }
     };
     
@@ -129,6 +153,13 @@ const Messages: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleConversationSelect = (id: string) => {
+    setActiveConversation(id);
+    if (isMobile) {
+      setShowSidebar(false);
+    }
+  };
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -182,14 +213,28 @@ const Messages: React.FC = () => {
   const activeConv = conversations.find(conv => conv.id === activeConversation);
 
   return (
-    <div className="flex h-screen max-h-screen overflow-hidden">
-              <div className="w-[250px] flex flex-col gap-4 py-6 pl-8 ">
-              </div>
+    <div className="flex h-screen max-h-screen overflow-hidden bg-gray-50">
       {/* Sidebar - Conversation List */}
-      <div className="w-1/4 border-r border-gray-200 flex flex-col bg-white">
+      <div 
+        className={`${
+          showSidebar ? 'flex' : 'hidden'
+        } md:flex flex-col bg-white border-r border-gray-200 ${
+          isMobile ? 'w-full absolute z-10' : 'w-full md:w-1/3 lg:w-1/4'
+        }`}
+      >
         {/* Search Header */}
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-2xl font-bold mb-4">Messages</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Messages</h1>
+            {isMobile && (
+              <button 
+                onClick={() => setShowSidebar(false)}
+                className="p-1 text-gray-500 hover:text-teal-500"
+              >
+                <ArrowLeft size={20} />
+              </button>
+            )}
+          </div>
           <div className="relative">
             <input
               type="text"
@@ -213,9 +258,9 @@ const Messages: React.FC = () => {
               <div 
                 key={conv.id}
                 className={`flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition ${activeConversation === conv.id ? 'bg-gray-100' : ''}`}
-                onClick={() => setActiveConversation(conv.id)}
+                onClick={() => handleConversationSelect(conv.id)}
               >
-                <div className="relative flex w-full flex-col-2">
+                <div className="relative">
                   <Image 
                     src={conv.avatar} 
                     alt={conv.name}
@@ -226,21 +271,20 @@ const Messages: React.FC = () => {
                   {conv.online && (
                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
-                
-                <div className="ml-4 flex-1 mt-[5px]">
+                </div>
+                <div className="ml-4 flex-1 min-w-0">
                   <div className="flex justify-between items-center">
-                    <h3 className="font-semibold text-gray-900">{conv.name}</h3>
-                    <span className="text-xs text-gray-500">{conv.timestamp ? formatTime(conv.timestamp) : ''}</span>
+                    <h3 className="font-semibold text-gray-900 truncate">{conv.name}</h3>
+                    <span className="text-xs text-gray-500 ml-2 whitespace-nowrap">{conv.timestamp ? formatTime(conv.timestamp) : ''}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-600 truncate max-w-[180px]">{conv.lastMessage}</p>
+                    <p className="text-sm text-gray-600 truncate">{conv.lastMessage}</p>
                     {conv.unread > 0 && (
-                      <span className="bg-teal-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      <span className="bg-teal-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2 flex-shrink-0">
                         {conv.unread}
                       </span>
                     )}
                   </div>
-                </div>
                 </div>
               </div>
             ))
@@ -249,13 +293,24 @@ const Messages: React.FC = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gray-50">
+      <div className={`${
+        !showSidebar || !isMobile ? 'flex' : 'hidden'
+      } md:flex flex-1 flex-col`}>
         {activeConv ? (
           <>
             {/* Chat Header */}
-            <div className="px-6 py-3 border-b border-gray-200 bg-white flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="relative">
+            <div className="px-4 md:px-6 py-3 border-b border-gray-200 bg-white flex items-center justify-between">
+              {isMobile && (
+                <button 
+                  onClick={() => setShowSidebar(true)} 
+                  className="mr-2 text-gray-500 hover:text-teal-500 md:hidden"
+                >
+                  <Menu size={20} />
+                </button>
+              )}
+              
+              <div className="flex items-center flex-1 min-w-0">
+                <div className="relative flex-shrink-0">
                   <Image 
                     src={activeConv.avatar} 
                     alt={activeConv.name}
@@ -267,18 +322,18 @@ const Messages: React.FC = () => {
                     <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
                 </div>
-                <div className="ml-3">
-                  <h3 className="font-semibold text-gray-900">{activeConv.name}</h3>
+                <div className="ml-3 flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 truncate">{activeConv.name}</h3>
                   <p className="text-xs text-gray-500">
                     {activeConv.online ? 'Online' : 'Offline'}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <button className="text-gray-500 hover:text-teal-500 transition">
+              <div className="flex items-center space-x-2 md:space-x-4">
+                <button className="text-gray-500 hover:text-teal-500 transition hidden sm:block">
                   <Phone size={20} />
                 </button>
-                <button className="text-gray-500 hover:text-teal-500 transition">
+                <button className="text-gray-500 hover:text-teal-500 transition hidden sm:block">
                   <Video size={20} />
                 </button>
                 <button className="text-gray-500 hover:text-teal-500 transition">
@@ -288,7 +343,7 @@ const Messages: React.FC = () => {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-4">
               {messages.map(message => {
                 const isUser = message.senderId === 'user';
                 
@@ -297,7 +352,7 @@ const Messages: React.FC = () => {
                     key={message.id} 
                     className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className={`max-w-[70%] ${isUser ? 'order-2' : 'order-1'}`}>
+                    <div className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] ${isUser ? 'order-2' : 'order-1'}`}>
                       <div 
                         className={`rounded-2xl px-4 py-3 ${
                           isUser 
@@ -305,7 +360,7 @@ const Messages: React.FC = () => {
                             : 'bg-white text-gray-800 rounded-bl-none border border-gray-200'
                         }`}
                       >
-                        <p className="text-sm">{message.content}</p>
+                        <p className="text-sm break-words">{message.content}</p>
                       </div>
                       <div className={`mt-1 text-xs text-gray-500 ${isUser ? 'text-right' : 'text-left'}`}>
                         {message.timestamp ? formatTime(message.timestamp) : ''}
@@ -318,8 +373,8 @@ const Messages: React.FC = () => {
             </div>
 
             {/* Message Input */}
-            <div className="bg-white border-t border-gray-200 p-4">
-              <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
+            <div className="bg-white border-t border-gray-200 p-2 sm:p-4">
+              <div className="flex items-center bg-gray-100 rounded-full px-2 sm:px-4 py-2">
                 <div className="relative z-10">
                   <button 
                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
@@ -354,7 +409,7 @@ const Messages: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Type a message..."
-                  className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 px-3 py-1"
+                  className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 px-2 sm:px-3 py-1 text-sm sm:text-base"
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -363,10 +418,9 @@ const Messages: React.FC = () => {
                       handleSendMessage();
                     }
                   }}
-                  autoFocus
                 />
                 
-                <div className="flex items-center space-x-2 z-10">
+                <div className="flex items-center space-x-1 sm:space-x-2 z-10">
                   <div className="relative">
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -378,11 +432,14 @@ const Messages: React.FC = () => {
                     
                     {/* Emoji Picker */}
                     {showEmojiPicker && (
-                      <div className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 px-8 grid grid-cols-3 gap-2 border">
+                      <div 
+                        ref={emojiPickerRef}
+                        className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 px-4 sm:px-8 grid grid-cols-3 gap-2 border"
+                      >
                         {emojis.map((emoji, index) => (
                           <button
                             key={index}
-                            className="w-8 h-8 hover:bg-gray-100 rounded flex items-center justify-center text-xl"
+                            className="w-6 h-6 sm:w-8 sm:h-8 hover:bg-gray-100 rounded flex items-center justify-center text-lg sm:text-xl"
                             onClick={() => {
                               setMessageInput(prev => prev + emoji);
                               setShowEmojiPicker(false);
@@ -417,6 +474,14 @@ const Messages: React.FC = () => {
               <div className="text-6xl mb-4">💬</div>
               <h2 className="text-xl font-semibold text-gray-700 mb-2">No conversation selected</h2>
               <p className="text-gray-500">Choose a conversation to start messaging</p>
+              {isMobile && !showSidebar && (
+                <button
+                  onClick={() => setShowSidebar(true)}
+                  className="mt-4 px-4 py-2 bg-teal-500 text-white rounded-full hover:bg-teal-600 transition"
+                >
+                  View Conversations
+                </button>
+              )}
             </div>
           </div>
         )}
