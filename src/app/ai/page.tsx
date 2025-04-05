@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
-import { Bot, User, Send, Sparkles, Sliders, X, ThumbsUp, ThumbsDown, Copy, Settings, PenLine, Clock, Trash2, Plus, ChevronDown, ChevronRight, Loader2 } from 'lucide-react'
+import { Bot, User, Send, Sparkles, X, ThumbsUp, ThumbsDown, Copy, Settings, Clock, Plus, ChevronDown, ChevronRight, Loader2 } from 'lucide-react'
 
 // Define the message type
 interface Message {
@@ -40,7 +39,7 @@ export default function AIAssistant() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // State for the selected model
-  const [selectedModel, setSelectedModel] = useState('gpt-4');
+  const [selectedModel, setSelectedModel] = useState('gemini');
   
   // State for chat histories
   const [chatHistories, setChatHistories] = useState<ChatHistory[]>([
@@ -48,6 +47,9 @@ export default function AIAssistant() {
     { id: '2', title: 'Биологийн судалгааны тусламж', date: new Date(Date.now() - 86400000) },
     { id: '3', title: 'Програмчлалын бодлого', date: new Date(Date.now() - 172800000) },
   ]);
+  
+  // State for error handling
+  const [error, setError] = useState<string | null>(null);
 
   // Example suggested prompts
   const suggestedPrompts = [
@@ -67,7 +69,7 @@ export default function AIAssistant() {
   }, [messages]);
 
   // Handle sending a new message
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!input.trim()) return;
 
     // Add user message
@@ -81,33 +83,60 @@ export default function AIAssistant() {
     setMessages([...messages, userMessage]);
     setInput('');
     setIsLoading(true);
+    setError(null);
 
-    // Simulate AI response after a delay
-    setTimeout(() => {
+    try {
+      // Call our API endpoint that will call Gemini
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get response from AI');
+      }
+
+      const data = await response.json();
+      
+      // Add AI response to messages
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: getAIResponse(input),
+        content: data.response,
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Update chat history if this is a new conversation
+      if (messages.length === 1) {
+        const newChat: ChatHistory = {
+          id: Date.now().toString(),
+          title: input.length > 20 ? input.substring(0, 20) + '...' : input,
+          date: new Date(),
+        };
+        setChatHistories([newChat, ...chatHistories]);
+      }
+    } catch (err) {
+      console.error('Error calling AI API:', err);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      
+      // Add error message
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'system',
+        content: 'Уучлаарай, хариу авахад алдаа гарлаа. Дахин оролдоно уу.',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
-
-  // Simple function to generate mock AI responses
-  const getAIResponse = (query: string): string => {
-    // This would be replaced with actual API calls to your AI service
-    const responses = [
-      "Энэ асуултад хариулахад, бид эхлээд үндсэн ойлголтуудыг авч үзэх хэрэгтэй. Таны асуултын дагуу...",
-      "Таны хүсэлтийн дагуу, дараах мэдээллийг танд өгч байна. Энэ нь танд тусална гэж найдаж байна.",
-      "Энэ бол маш сонирхолтой асуулт байна. Энэ талаар илүү дэлгэрэнгүй судалгаа хийж үзье.",
-      "Таны асуултыг шийдвэрлэхийн тулд хэд хэдэн алхам хийх хэрэгтэй. Эхлээд...",
-      "Таны хүссэн дагуу мэдээллийг боловсруулж байна. Үүнийг хэрхэн ашиглах талаар хэдэн зөвлөгөө өгье."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-
 
   // Handle key press to send messages with Enter
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -125,6 +154,7 @@ export default function AIAssistant() {
       content: 'Сайн байна уу! Шинэ яриа эхэллээ. Би танд хэрхэн туслах вэ?',
       timestamp: new Date(),
     }]);
+    setError(null);
   };
 
   // Handle prompt selection
@@ -188,26 +218,29 @@ export default function AIAssistant() {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <button 
-                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'gpt-4' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  onClick={() => setSelectedModel('gpt-4')}
+                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'gemini' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700'}`}
+                  onClick={() => setSelectedModel('gemini')}
+                >
+                  Gemini
+                </button>
+                <button 
+                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'gpt-4' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700 opacity-50'}`}
+                  onClick={() => {}} 
+                  disabled
                 >
                   GPT-4
                 </button>
                 <button 
-                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'gpt-3.5' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  onClick={() => setSelectedModel('gpt-3.5')}
-                >
-                  GPT-3.5
-                </button>
-                <button 
-                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'claude' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  onClick={() => setSelectedModel('claude')}
+                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'claude' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700 opacity-50'}`}
+                  onClick={() => {}}
+                  disabled
                 >
                   Claude
                 </button>
                 <button 
-                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'llama' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  onClick={() => setSelectedModel('llama')}
+                  className={`py-1 px-2 text-xs rounded ${selectedModel === 'llama' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-700 opacity-50'}`}
+                  onClick={() => {}}
+                  disabled
                 >
                   Llama 2
                 </button>
@@ -232,7 +265,7 @@ export default function AIAssistant() {
             {isSidebarOpen ? <X size={20} /> : <ChevronRight size={20} />}
           </button>
           <h2 className="font-medium">AI Туслах</h2>
-          <button className="p-2 rounded-md hover:bg-gray-100">
+          <button className="p-2 rounded-md hover:bg-gray-100" onClick={handleNewChat}>
             <Plus size={20} />
           </button>
         </div>
@@ -272,7 +305,13 @@ export default function AIAssistant() {
                 key={message.id} 
                 className={`mb-6 ${message.role === 'user' ? 'text-right' : ''}`}
               >
-                <div className={`inline-block max-w-[85%] ${message.role === 'user' ? 'bg-teal-500 text-white' : 'bg-white border border-gray-200'} rounded-2xl p-4 shadow-sm`}>
+                <div className={`inline-block max-w-[85%] ${
+                  message.role === 'user' 
+                    ? 'bg-teal-500 text-white' 
+                    : message.role === 'system' 
+                      ? 'bg-red-50 border border-red-200' 
+                      : 'bg-white border border-gray-200'
+                } rounded-2xl p-4 shadow-sm`}>
                   <div className="flex items-start">
                     {message.role === 'assistant' && (
                       <div className="mr-3 pt-1">
@@ -281,8 +320,21 @@ export default function AIAssistant() {
                         </div>
                       </div>
                     )}
+                    {message.role === 'system' && (
+                      <div className="mr-3 pt-1">
+                        <div className="bg-red-100 p-1 rounded-lg">
+                          <X size={18} className="text-red-700" />
+                        </div>
+                      </div>
+                    )}
                     <div className="flex-1">
-                      <p className={`mb-1 text-sm ${message.role === 'user' ? 'text-white' : 'text-gray-800'}`}>
+                      <p className={`mb-1 text-sm ${
+                        message.role === 'user' 
+                          ? 'text-white' 
+                          : message.role === 'system' 
+                            ? 'text-red-800' 
+                            : 'text-gray-800'
+                      }`}>
                         {message.content}
                       </p>
                       <div className="text-xs text-right mt-1 opacity-70">
@@ -308,7 +360,11 @@ export default function AIAssistant() {
                     <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
                       <ThumbsDown size={14} />
                     </button>
-                    <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
+                    <button 
+                      className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                      onClick={() => navigator.clipboard.writeText(message.content)}
+                      title="Copy to clipboard"
+                    >
                       <Copy size={14} />
                     </button>
                   </div>
@@ -316,6 +372,7 @@ export default function AIAssistant() {
               </div>
             ))}
             
+            {/* Loading indicator */}
             {/* Loading indicator */}
             {isLoading && (
               <div className="mb-6">
@@ -332,12 +389,12 @@ export default function AIAssistant() {
                 </div>
               </div>
             )}
-            
             {/* Invisible element to scroll to */}
             <div ref={messagesEndRef} />
           </div>
         </div>
 
+        {/* Input area */}
         {/* Input area */}
         <div className="p-4 border-t border-gray-200 bg-white">
           <div className="max-w-3xl mx-auto relative">
@@ -353,6 +410,7 @@ export default function AIAssistant() {
                   minHeight: '56px',
                   height: 'auto',
                 }}
+                disabled={isLoading}
               />
               <button
                 onClick={handleSendMessage}
@@ -365,11 +423,11 @@ export default function AIAssistant() {
               </button>
             </div>
             <p className="mt-2 text-xs text-center text-gray-500">
-              AI туслах ажиллагаа нь туршилтын шатандаа яваа бөгөөд заримдаа буруу мэдээлэл өгч болохыг анхаарна уу.
+              {selectedModel === 'gemini' ? 'Google Gemini AI' : 'AI туслах'} ажиллагаа нь туршилтын шатандаа яваа бөгөөд заримдаа буруу мэдээлэл өгч болохыг анхаарна уу.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
