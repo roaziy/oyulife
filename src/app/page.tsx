@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Tinder from "../../public/images/homepage/tinder.jpg";
 
+import StorySection from "@/components/homepage/StorySection";
+
 export default function Home() {
   const [current, setCurrent] = useState(0);
   const images = [Tinder, Tinder, Tinder];
@@ -25,6 +27,11 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 max-w-2xl flex flex-col items-center gap-8">
+
+        <div className="flex justify-center">
+          <StorySection />
+        </div>
+
         <div className="relative bg-white rounded-lg shadow-xl w-full flex flex-col items-center p-6">
           <h1 className="text-3xl font-bold mb-6">
             Find your <span className="text-teal-500">Oyu</span>-Friend
@@ -97,7 +104,7 @@ export default function Home() {
           <p className="text-gray-500 text-sm">Rating: 2230</p>
           <p className="text-gray-500 text-sm">Top 0.1% of 237844</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-[#EFEFEF] p-5 rounded-lg shadow-md">
           <h2 className="font-bold mb-4">Top Rank</h2>
           <ul className="space-y-3">
             {[1, 2, 3, 4, 5, 6, 7].map((rank) => (
