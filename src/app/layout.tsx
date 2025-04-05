@@ -38,7 +38,7 @@ function RootLayoutClient({
         <div className="fixed top-0 left-0 w-full">
           <NavBar />
         </div>
-        <div className="pt-16">{children}</div>
+        <div className="">{children}</div>
 
         {/* Commented out the login functionality */}
         {/* {isAuthenticated ? (
