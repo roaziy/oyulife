@@ -137,8 +137,8 @@ export default function AIAssistant() {
       {/* Sidebar - Chat history */}
       <div className={`${
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } md:translate-x-0 fixed md:relative z-20 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out`}>
-        <div className="flex flex-col h-full">
+      } md:translate-x-0 fixed md:relative z-20 h-screen w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out`}>
+        <div className="flex flex-col h-screen">
           {/* New Chat Button */}
           <div className="p-4 border-b border-gray-200">
             <button 

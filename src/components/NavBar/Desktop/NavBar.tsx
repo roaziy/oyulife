@@ -15,7 +15,7 @@ const NavBar = () => {
         { href: "/test", icon: <Compass />, text: "Explore" },
         { href: "/notification", icon: <Bell />, text: "Notifications" },
         { href: "/Messages", icon: <Mail />, text: "Messages" },
-        { href: "/test", icon: <FileText />, text: "AI Assistant" },
+        { href: "/ai", icon: <FileText />, text: "AI Assistant" },
         { href: "/KnowledgeForum", icon: <Bookmark />, text: "Knowledge Forum" },
         { href: "/community", icon: <Users />, text: "Communities" },
         { href: "/myNotebook", icon: <Zap />, text: "My notebook" },
