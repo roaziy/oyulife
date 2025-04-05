@@ -108,6 +108,7 @@ export default function AIAssistant() {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
+
   // Handle key press to send messages with Enter
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
