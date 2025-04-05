@@ -1,21 +1,25 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaApple } from "react-icons/fa";
 
-export default function Auth() {
+export default function Auth({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // Simulate authentication logic here (e.g., API call)
-    // After successful login or signup, navigate to the main page
-    router.push("/main"); // Replace "/main" with your main page route
+    localStorage.setItem("authToken", "fake-auth-token");
+
+    // Notify parent component that login was successful
+    onLoginSuccess();
+
+    // Navigate to the main page
+    router.push("/");
   };
 
   return (
@@ -34,25 +38,25 @@ export default function Auth() {
       </div>
 
       {/* Right side with auth form */}
-      <div className="w-full md:w-1/2 flex flex-col">
-        {/* Top navigation */}
-        <div className="flex justify-end p-6">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6">
+        {/* Toggle buttons */}
+        <div className="flex mb-8 space-x-4">
           <button
             onClick={() => setIsLogin(true)}
-            className={`px-6 py-2 rounded-md transition mr-4 ${
+            className={`px-6 py-2 rounded-md font-medium transition ${
               isLogin
-                ? "bg-blue-400 text-white hover:bg-blue-500"
-                : "bg-transparent text-gray-700 hover:bg-gray-100"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             Log In
           </button>
           <button
             onClick={() => setIsLogin(false)}
-            className={`px-6 py-2 rounded-md transition ${
+            className={`px-6 py-2 rounded-md font-medium transition ${
               !isLogin
-                ? "bg-blue-400 text-white hover:bg-blue-500"
-                : "bg-transparent text-gray-700 hover:bg-gray-100"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             Sign Up
@@ -60,79 +64,77 @@ export default function Auth() {
         </div>
 
         {/* Form container */}
-        <div className="flex-grow flex items-center justify-center px-6 pb-6">
-          <div className="w-full max-w-md">
-            <h1 className="text-3xl font-bold mb-10">
-              {isLogin ? "Log in" : "Sign up"}
-            </h1>
+        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">
+            {isLogin ? "Log In" : "Sign Up"}
+          </h1>
 
-            <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label htmlFor="email" className="block text-gray-600 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            {!isLogin && (
               <div className="mb-6">
-                <label htmlFor="email" className="block text-gray-600 mb-2">
-                  Email
+                <label htmlFor="name" className="block text-gray-600 mb-2">
+                  Full Name
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  placeholder="Enter your email"
+                  type="text"
+                  id="name"
+                  placeholder="Enter your full name"
                   className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   required
                 />
               </div>
+            )}
 
-              {!isLogin && (
-                <div className="mb-6">
-                  <label htmlFor="name" className="block text-gray-600 mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder="Enter your full name"
-                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    required
-                  />
-                </div>
-              )}
-
-              <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-600 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    placeholder="Enter your password"
-                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                  </button>
-                </div>
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-gray-600 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="Enter your password"
+                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
               </div>
+            </div>
 
-              {isLogin && (
-                <div className="flex justify-end mb-6">
-                  <a href="#" className="text-sm text-gray-600 hover:text-blue-500">
-                    Forgot password?
-                  </a>
-                </div>
-              )}
+            {isLogin && (
+              <div className="flex justify-end mb-6">
+                <a href="#" className="text-sm text-gray-600 hover:text-blue-500">
+                  Forgot password?
+                </a>
+              </div>
+            )}
 
-              <button
-                type="submit"
-                className="w-full bg-navy-800 text-white py-3 rounded-md font-medium hover:bg-navy-900 transition mb-6"
-              >
-                {isLogin ? "Log In" : "Sign Up"}
-              </button>
-            </form>
-          </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-3 rounded-md font-medium hover:bg-blue-600 transition"
+            >
+              {isLogin ? "Log In" : "Sign Up"}
+            </button>
+          </form>
         </div>
       </div>
     </div>
