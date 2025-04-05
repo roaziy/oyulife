@@ -366,14 +366,14 @@ const Messages: React.FC = () => {
                   <div className="relative">
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-gray-500 hover:text-teal-500 transition"
+                      className="text-gray-500 px-28 hover:text-teal-500 transition"
                     >
                       <Smile size={20} />
                     </button>
                     
                     {/* Emoji Picker */}
                     {showEmojiPicker && (
-                      <div className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 grid grid-cols-3 gap-2 border">
+                      <div className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 px-8 grid grid-cols-3 gap-2 border">
                         {emojis.map((emoji, index) => (
                           <button
                             key={index}
