@@ -14,7 +14,7 @@ const NavBar = () => {
                     </Link>
                 </div>
                 <nav className="space-y-10 ml-3 select-none">
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Home /> Home
                     </Link>
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
