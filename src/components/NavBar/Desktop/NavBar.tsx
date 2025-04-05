@@ -32,7 +32,7 @@ const NavBar = () => {
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Bookmark /> Knowledge Forum
                     </Link>
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/community" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Users /> Communities
                     </Link>
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">

@@ -13,7 +13,7 @@ export default function Home() {
     Array.from({ length: 16 }, (_, index) => ({
       id: index,
       name: "Lisa",
-      imageUrl: "/api/placeholder/100/100"
+      imageUrl: "/images/story/lisa.png"
     }))
   );
 

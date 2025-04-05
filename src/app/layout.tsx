@@ -35,7 +35,7 @@ function RootLayoutClient({
     <html lang="en">
       <body>
         {/* Always show NavBar and children */}
-        <div className="fixed top-0 left-0 w-full">
+        <div className="fixed top-0 left-0 w-20%">
           <NavBar />
         </div>
         <div className="pt-16">{children}</div>
