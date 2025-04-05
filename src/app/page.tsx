@@ -89,6 +89,9 @@ export default function Home() {
 
       {/* Right Sidebar */}
       <div className="w-[280px] space-y-6">
+      </div>
+            {/* Right Sidebar */}
+      <div className="fixed mr-7 right-0 w-[280px] space-y-6">
         <div className="bg-[#EFEFEF] p-4 rounded-lg shadow-md">
           <h2 className="font-bold mb-2">Your current Rank</h2>
           <p className="text-gray-500 text-sm">Rating: 2230</p>
