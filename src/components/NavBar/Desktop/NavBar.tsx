@@ -12,7 +12,6 @@ const NavBar = () => {
 
     const navLinks = [
         { href: "/", icon: <Home />, text: "Home" },
-        { href: "/test", icon: <Compass />, text: "Explore" },
         { href: "/notification", icon: <Bell />, text: "Notifications" },
         { href: "/Messages", icon: <Mail />, text: "Messages" },
         { href: "/ai", icon: <FileText />, text: "AI Assistant" },
