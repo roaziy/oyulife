@@ -23,19 +23,16 @@ const NavBar = () => {
     ];
 
     return (
-        <div className='z-[1000] fixed top-0 left-0 w-full h-screen md:h-auto md:w-64 bg-white shadow-md'>
-            {/* Mobile hamburger button */}
-            <div className="md:hidden fixed top-4 left-4 z-50">
+        <>
+            {/* Mobile header bar with logo and menu button */}
+            <div className="fixed top-0 left-0 w-full h-16 bg-white shadow-md flex items-center justify-center md:hidden z-50">
                 <button 
                     onClick={toggleMenu} 
-                    className="p-2 bg-white rounded-md shadow-md focus:outline-none"
+                    className="absolute left-4 p-2 focus:outline-none"
                 >
                     {isOpen ? <X /> : <Menu />}
                 </button>
-            </div>
-
-            {/* Mobile logo */}
-            <div className="md:hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-40">
+                
                 <Image 
                     src="/images/DesktopNavbar/fullLogo.png" 
                     alt="Logo" 
@@ -45,13 +42,13 @@ const NavBar = () => {
                 />
             </div>
 
-            {/* Navigation sidebar - responsive */}
+            {/* Navigation sidebar */}
             <div className={`
-                fixed top-0 left-0 z-40
+                fixed top-0 left-0 
                 h-screen w-64 flex flex-col justify-between py-9 px-4 bg-white shadow-md
                 transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
-                md:translate-x-0 md:static
+                md:translate-x-0 md:static md:h-screen z-40
             `}>
                 <div>
                     <div className="text-2xl font-bold mb-10">
@@ -88,14 +85,14 @@ const NavBar = () => {
                 </div>
             </div>
 
-            {/* Overlay that appears behind the sidebar on mobile */}
+            {/* Semi-transparent overlay behind the sidebar on mobile */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-opacity-50 z-30 md:hidden"
+                    className="fixed inset-0 bg-black bg-opacity-10 z-30 md:hidden"
                     onClick={() => setIsOpen(false)}
                 ></div>
             )}
-        </div>
+        </>
     );
 };
 

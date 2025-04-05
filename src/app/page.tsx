@@ -17,6 +17,7 @@ export default function Home() {
     }))
   );
 
+
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
@@ -46,7 +47,7 @@ export default function Home() {
   return (
     <div className="flex flex-col lg:flex-row lg:gap-8 p-6">
       {/* Main Content */}
-      <div className="flex-1 p-0 mb-6">
+      <div className="flex-1 p-0 mb-6 z-[2]">
         <div className="p-0 mb-6 flex justify-center bg-white rounded-lg shadow-md relative flex-row items-center">
           <button
             onClick={scrollLeft}
@@ -109,7 +110,7 @@ export default function Home() {
             <ChevronRight />
           </button>
 
-          <div className="relative w-full ml-20 max-w-md h-[454px]">
+          <div className="relative w-full max-w-md h-[454px]">
             {images.map((img, index) => (
               <Image
                 key={index}
