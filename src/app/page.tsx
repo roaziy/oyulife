@@ -129,7 +129,7 @@ export default function Home() {
           <p className="text-gray-500 text-sm">Rating: 2230</p>
           <p className="text-gray-500 text-sm">Top 0.1% of 237844</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-[#EFEFEF] p-4 rounded-lg shadow-md">
           <h2 className="font-bold mb-4">Top Rank</h2>
           <ul className="space-y-3">
             {[1, 2, 3, 4, 5, 6, 7].map((rank) => (
