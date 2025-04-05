@@ -45,6 +45,89 @@ interface TopUser extends Author {
   rank: number;
 }
 
+interface Comment {
+  id: number;
+  postId: number;
+  author: Author;
+  content: string;
+  createdAt: string;
+  likes: number;
+}
+
+// Mock data for comments
+const MOCK_COMMENTS: Comment[] = [
+  {
+    id: 1,
+    postId: 1,
+    author: {
+      id: "user2",
+      name: "Болор Эрдэнэ",
+      avatar: "/images/story/lisa.png",
+      university: "ШУТИС",
+      points: 3450,
+    },
+    content: "Би тусалж чадна. React-ийн үндсэн ойлголтуудыг сайн мэддэг.",
+    createdAt: "1 цагийн өмнө",
+    likes: 3,
+  },
+  {
+    id: 2,
+    postId: 1,
+    author: {
+      id: "user3",
+      name: "Цэцэг Н.",
+      avatar: "/images/story/lisa.png",
+      university: "МУИС",
+      points: 5600,
+    },
+    content: "Javascript-ийн DOM манипуляцийн талаар асуух зүйл байвал асууна уу?",
+    createdAt: "30 минутын өмнө",
+    likes: 1,
+  },
+  {
+    id: 3,
+    postId: 1,
+    author: {
+      id: "user3",
+      name: "Цэцэг Н.",
+      avatar: "/images/story/lisa.png",
+      university: "МУИС",
+      points: 5600,
+    },
+    content: "Javascript-ийн DOM манипуляцийн талаар асуух зүйл байвал асууна уу?",
+    createdAt: "30 минутын өмнө",
+    likes: 1,
+  },
+  {
+    id: 4,
+    postId: 1,
+    author: {
+      id: "user3",
+      name: "Цэцэг Н.",
+      avatar: "/images/story/lisa.png",
+      university: "МУИС",
+      points: 5600,
+    },
+    content: "Javascript-ийн DOM манипуляцийн талаар асуух зүйл байвал асууна уу?",
+    createdAt: "30 минутын өмнө",
+    likes: 1,
+  },
+  {
+    id: 5,
+    postId: 1,
+    author: {
+      id: "user3",
+      name: "Цэцэг Н.",
+      avatar: "/images/story/lisa.png",
+      university: "МУИС",
+      points: 5600,
+    },
+    content: "Javascript-ийн DOM манипуляцийн талаар асуух зүйл байвал асууна уу?",
+    createdAt: "30 минутын өмнө",
+    likes: 1,
+  },
+];
+
 // Mock data for community posts
 const MOCK_POSTS: Post[] = [
   {
@@ -52,7 +135,7 @@ const MOCK_POSTS: Post[] = [
     author: {
       id: "user1",
       name: "Bat Erdene",
-      avatar: "/api/placeholder/50/50",
+      avatar: "/images/story/lisa.png",
       university: "МУИС",
       points: 1250,
     },
@@ -69,13 +152,13 @@ const MOCK_POSTS: Post[] = [
     author: {
       id: "user2",
       name: "Болор Эрдэнэ",
-      avatar: "/api/placeholder/50/50",
+      avatar: "/images/story/lisa.png",
       university: "ШУТИС",
       points: 3450,
     },
     content:
       "Маргааш Математик II хичээлээр семинар болно. Ирэх семинарт бэлтгэхдээ дараах дасгалуудыг хийх хэрэгтэй. Бие биедээ туслацгаая!",
-    image: "/api/placeholder/400/300",
+    image: "/images/post/post.jpg",
     likes: 45,
     comments: 12,
     shares: 8,
@@ -87,7 +170,7 @@ const MOCK_POSTS: Post[] = [
     author: {
       id: "user3",
       name: "Цэцэг Н.",
-      avatar: "/api/placeholder/50/50",
+      avatar: "/images/story/lisa.png",
       university: "МУИС",
       points: 5600,
     },
@@ -104,13 +187,13 @@ const MOCK_POSTS: Post[] = [
     author: {
       id: "user4",
       name: "Тэмүүлэн Г.",
-      avatar: "/api/placeholder/50/50",
+      avatar: "/images/story/lisa.png",
       university: "МУИС-ХШУИС",
       points: 4200,
     },
     content:
       "Өнөөдөр CS350 Python хичээлийн хүрээнд хийсэн төслөө танилцуулж байна. Санал шүүмжээ үлдээгээрэй!",
-    image: "/api/placeholder/400/300",
+    image: "/images/post/post.jpg",
     likes: 67,
     comments: 23,
     shares: 15,
@@ -164,7 +247,7 @@ const TOP_USERS: TopUser[] = [
   {
     id: "user5",
     name: "Ганболд Д.",
-    avatar: "/api/placeholder/50/50",
+    avatar: "/images/story/lisa.png",
     university: "МУИС",
     points: 12500,
     rank: 1,
@@ -172,7 +255,7 @@ const TOP_USERS: TopUser[] = [
   {
     id: "user6",
     name: "Дэлгэрмаа С.",
-    avatar: "/api/placeholder/50/50",
+    avatar: "/images/story/lisa.png",
     university: "ШУТИС",
     points: 10850,
     rank: 2,
@@ -180,17 +263,17 @@ const TOP_USERS: TopUser[] = [
   {
     id: "user7",
     name: "Баярсайхан Т.",
-    avatar: "/api/placeholder/50/50",
+    avatar: "/images/story/lisa.png",
     university: "МУИС",
     points: 9240,
     rank: 3,
   },
 ];
 
-// Component for individual post
-const Post: React.FC<{ post: Post }> = ({ post }) => {
+// Component for individual comment
+const Comment: React.FC<{ comment: Comment }> = ({ comment }) => {
   const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(post.likes);
+  const [likes, setLikes] = useState(comment.likes);
 
   const handleLike = () => {
     if (liked) {
@@ -199,6 +282,85 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
       setLikes(likes + 1);
     }
     setLiked(!liked);
+  };
+
+  return (
+    <div className="flex gap-3 py-3 border-b border-gray-100 last:border-0">
+      <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+        <Image
+          src={comment.author.avatar}
+          alt={comment.author.name}
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="flex-grow">
+        <div className="flex items-center gap-2 mb-1">
+          <h4 className="font-medium text-gray-900">{comment.author.name}</h4>
+          <span className="text-xs text-gray-500">{comment.createdAt}</span>
+        </div>
+        <p className="text-gray-800 text-sm mb-2">{comment.content}</p>
+        <button
+          className={`flex items-center gap-1 text-xs ${
+            liked ? "text-blue-600" : "text-gray-500"
+          } hover:text-blue-600`}
+          onClick={handleLike}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-4 h-4"
+          >
+            <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H5.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
+          </svg>
+          <span>{likes}</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Component for individual post
+const Post: React.FC<{ post: Post }> = ({ post }) => {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(post.likes);
+  const [showComments, setShowComments] = useState(false);
+  const [commentContent, setCommentContent] = useState("");
+  const [comments, setComments] = useState<Comment[]>(() => 
+    MOCK_COMMENTS.filter((comment) => comment.postId === post.id)
+  );
+
+  const handleLike = () => {
+    if (liked) {
+      setLikes(likes - 1);
+    } else {
+      setLikes(likes + 1);
+    }
+    setLiked(!liked);
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (commentContent.trim()) {
+      const newComment: Comment = {
+        id: comments.length + 1,
+        postId: post.id,
+        author: {
+          id: "currentUser",
+          name: "Та",
+          avatar: "/images/story/lisa.png",
+          university: "МУИС",
+          points: 1000,
+        },
+        content: commentContent.trim(),
+        createdAt: "Одоо",
+        likes: 0,
+      };
+      
+      setComments([newComment, ...comments]);
+      setCommentContent("");
+    }
   };
 
   return (
@@ -273,7 +435,10 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
           </svg>
           <span>{likes}</span>
         </button>
-        <button className="flex items-center gap-1 text-gray-500 hover:text-blue-600">
+        <button 
+          className="flex items-center gap-1 text-gray-500 hover:text-blue-600"
+          onClick={() => setShowComments(!showComments)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -286,7 +451,7 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
               clipRule="evenodd"
             />
           </svg>
-          <span>{post.comments}</span>
+          <span>{comments.length}</span>
         </button>
         <button className="flex items-center gap-1 text-gray-500 hover:text-blue-600">
           <svg
@@ -304,6 +469,41 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
           <span>{post.shares}</span>
         </button>
       </div>
+
+      {/* Comments section */}
+      {showComments && (
+        <div className="mt-4 border-t border-gray-100 pt-4">
+          {/* Comment input */}
+          <form onSubmit={handleCommentSubmit} className="mb-4">
+            <div className="flex gap-3">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                <Image
+                  src="/images/story/lisa.png"
+                  alt="Your avatar"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex-grow">
+                <input
+                  type="text"
+                  placeholder="Сэтгэгдэл бичих..."
+                  className="w-full border border-gray-200 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={commentContent}
+                  onChange={(e) => setCommentContent(e.target.value)}
+                />
+              </div>
+            </div>
+          </form>
+
+          {/* Comments list */}
+          <div className="space-y-1 max-h-[400px] overflow-y-auto pr-2">
+            {comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -354,7 +554,7 @@ export default function CommunityPage() {
               <div className="flex items-center mb-4">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
                   <Image
-                    src="/api/placeholder/50/50"
+                    src="/images/story/lisa.png"
                     alt="Your avatar"
                     fill
                     className="object-cover"
@@ -557,7 +757,7 @@ export default function CommunityPage() {
                         <div className="flex items-center gap-2">
                           <div className="relative w-6 h-6 rounded-full overflow-hidden">
                             <Image
-                              src="/api/placeholder/50/50"
+                              src="/images/story/lisa.png"
                               alt="Author"
                               fill
                               className="object-cover"
@@ -614,7 +814,7 @@ export default function CommunityPage() {
                           <div className="flex items-center gap-2">
                             <div className="relative w-6 h-6 rounded-full overflow-hidden">
                               <Image
-                                src="/api/placeholder/50/50"
+                                src="/images/story/lisa.png"
                                 alt="Author"
                                 fill
                                 className="object-cover"
