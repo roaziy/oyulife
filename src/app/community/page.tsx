@@ -322,7 +322,7 @@ const Comment: React.FC<{ comment: Comment }> = ({ comment }) => {
 };
 
 // Component for individual post
-const Post: React.FC<{ post: Post }> = ({ post }) => {
+const Post: React.FC<{ post: Post; onDelete: (id: number) => void; onEdit: (id: number, newContent: string) => void }> = ({ post, onDelete, onEdit }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(post.likes);
   const [showComments, setShowComments] = useState(false);
@@ -330,6 +330,10 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
   const [comments, setComments] = useState<Comment[]>(() => 
     MOCK_COMMENTS.filter((comment) => comment.postId === post.id)
   );
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(post.content);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const isCurrentUser = post.author.id === "currentUser";
 
   const handleLike = () => {
     if (liked) {
@@ -363,36 +367,129 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
     }
   };
 
+  const handleEdit = () => {
+    if (isEditing) {
+      onEdit(post.id, editedContent);
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const handleDelete = () => {
+    setShowDeleteAlert(true);
+  };
+
+  const confirmDelete = () => {
+    onDelete(post.id);
+    setShowDeleteAlert(false);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteAlert(false);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+      {/* Delete Alert Dialog */}
+      {showDeleteAlert && (
+        <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4 transform transition-all">
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-red-100 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-red-600">
+                  <path fillRule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+            <h3 className="text-xl font-semibold text-center text-gray-900 mb-2">Пост устгах</h3>
+            <p className="text-gray-600 text-center mb-6">
+              Энэ постыг устгахдаа итгэлтэй байна уу? Энэ үйлдлийг буцаах боломжгүй.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+              >
+                Цуцлах
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              >
+                Устгах
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Author info */}
-      <div className="flex items-center mb-3">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-          <Image
-            src={post.author.avatar}
-            alt={post.author.name}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div>
-          <div className="flex items-center">
-            <h3 className="font-medium text-gray-900">{post.author.name}</h3>
-            <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
-              {post.author.university}
-            </span>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+            <Image
+              src={post.author.avatar}
+              alt={post.author.name}
+              fill
+              className="object-cover"
+            />
           </div>
-          <div className="flex items-center text-xs text-gray-500">
-            <span>{post.createdAt}</span>
-            <span className="mx-1">•</span>
-            <span>{post.author.points} оноо</span>
+          <div>
+            <div className="flex items-center">
+              <h3 className="font-medium text-gray-900">{post.author.name}</h3>
+              <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                {post.author.university}
+              </span>
+            </div>
+            <div className="flex items-center text-xs text-gray-500">
+              <span>{post.createdAt}</span>
+              <span className="mx-1">•</span>
+              <span>{post.author.points} оноо</span>
+            </div>
           </div>
         </div>
+        {isCurrentUser && (
+          <div className="flex space-x-2">
+            <button 
+              onClick={handleEdit}
+              className="text-gray-500 hover:text-blue-600"
+              title={isEditing ? "Хадгалах" : "Засах"}
+            >
+              {isEditing ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 0 1 1.04-.208Z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                  <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                </svg>
+              )}
+            </button>
+            <button 
+              onClick={handleDelete}
+              className="text-gray-500 hover:text-red-600"
+              title="Устгах"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-3.521a48.19 48.19 0 0 1 3.368 0c1.603.621 2.816 1.957 2.816 3.521Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Post content */}
       <div className="mb-3">
-        <p className="text-gray-800">{post.content}</p>
+        {isEditing ? (
+          <textarea
+            className="w-full border border-gray-200 rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+            rows={3}
+          />
+        ) : (
+          <p className="text-gray-800">{post.content}</p>
+        )}
         {post.image && (
           <div className="mt-3 relative w-full h-48 rounded-lg overflow-hidden">
             <Image
@@ -543,6 +640,41 @@ const ChallengeCard: React.FC<{ challenge: Challenge }> = ({ challenge }) => {
 export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState("posts");
   const [postContent, setPostContent] = useState("");
+  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
+
+  const handlePublishPost = () => {
+    if (postContent.trim()) {
+      const newPost: Post = {
+        id: posts.length + 1,
+        author: {
+          id: "currentUser",
+          name: "Та",
+          avatar: "/images/story/lisa.png",
+          university: "МУИС",
+          points: 1000,
+        },
+        content: postContent.trim(),
+        likes: 0,
+        comments: 0,
+        shares: 0,
+        tags: [],
+        createdAt: "Одоо",
+      };
+      
+      setPosts([newPost, ...posts]);
+      setPostContent("");
+    }
+  };
+
+  const handleDeletePost = (id: number) => {
+    setPosts(posts.filter(post => post.id !== id));
+  };
+
+  const handleEditPost = (id: number, newContent: string) => {
+    setPosts(posts.map(post => 
+      post.id === id ? { ...post, content: newContent } : post
+    ));
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -625,6 +757,7 @@ export default function CommunityPage() {
                       : "bg-blue-300 cursor-not-allowed"
                   }`}
                   disabled={!postContent.trim()}
+                  onClick={handlePublishPost}
                 >
                   Нийтлэх
                 </button>
@@ -671,8 +804,13 @@ export default function CommunityPage() {
             <div>
               {activeTab === "posts" && (
                 <div>
-                  {MOCK_POSTS.map((post) => (
-                    <Post key={post.id} post={post} />
+                  {posts.map((post) => (
+                    <Post 
+                      key={post.id} 
+                      post={post} 
+                      onDelete={handleDeletePost}
+                      onEdit={handleEditPost}
+                    />
                   ))}
                   <div className="flex justify-center my-6">
                     <button className="bg-white border border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">

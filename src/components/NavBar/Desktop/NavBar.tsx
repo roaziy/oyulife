@@ -18,7 +18,7 @@ const NavBar = () => {
         { href: "/KnowledgeForum", icon: <Bookmark />, text: "Knowledge Forum" },
         { href: "/community", icon: <Users />, text: "Communities" },
         { href: "/myNotebook", icon: <Zap />, text: "My notebook" },
-        { href: "/test", icon: <User />, text: "Dashboard" },
+        { href: "/dashboard", icon: <User />, text: "Dashboard" },
         { href: "/test", icon: <Smile />, text: "More" }
     ];
 
