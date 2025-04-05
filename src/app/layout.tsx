@@ -45,7 +45,7 @@ function RootLayoutClient({
         </div>
         
         {/* Commented out the login functionality */}
-        {isAuthenticated ? (
+        {/* {isAuthenticated ? (
           <>
             <div className="fixed top-0 left-0 w-full">
               <NavBar />
@@ -54,7 +54,7 @@ function RootLayoutClient({
           </>
         ) : (
           <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
-        )} 
+        )} */}
       </body>
     </html>
   );
