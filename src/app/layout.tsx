@@ -12,29 +12,36 @@ function RootLayoutClient({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    // Clear the token on page refresh
-    localStorage.removeItem("authToken");
+  // useEffect(() => {
+  //   // Clear the token on page refresh
+  //   localStorage.removeItem("authToken");
 
-    const checkAuth = () => {
-      const token = localStorage.getItem("authToken");
-      setIsAuthenticated(!!token);
-    };
+  //   const checkAuth = () => {
+  //     const token = localStorage.getItem("authToken");
+  //     setIsAuthenticated(!!token);
+  //   };
 
-    checkAuth();
-    window.addEventListener("storage", checkAuth);
+  //   checkAuth();
+  //   window.addEventListener("storage", checkAuth);
 
-    return () => {
-      window.removeEventListener("storage", checkAuth);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("storage", checkAuth);
+  //   };
+  // }, []);
 
   return (
     <html lang="en">
       <body>
-        {isAuthenticated ? (
+        {/* Always show NavBar and children */}
+        <div className="fixed top-0 left-0 w-full">
+          <NavBar />
+        </div>
+        <div className="pt-16">{children}</div>
+
+        {/* Commented out the login functionality */}
+        {/* {isAuthenticated ? (
           <>
             <div className="fixed top-0 left-0 w-full">
               <NavBar />
@@ -43,7 +50,7 @@ function RootLayoutClient({
           </>
         ) : (
           <Auth onLoginSuccess={() => setIsAuthenticated(true)} />
-        )}
+        )} */}
       </body>
     </html>
   );
