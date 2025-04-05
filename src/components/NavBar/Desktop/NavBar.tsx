@@ -23,7 +23,7 @@ const NavBar = () => {
     ];
 
     return (
-        <>
+        <div className='z-[1000]'>
             {/* Mobile hamburger button */}
             <div className="md:hidden fixed top-4 left-4 z-50">
                 <button 
@@ -91,11 +91,11 @@ const NavBar = () => {
             {/* Overlay that appears behind the sidebar on mobile */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+                    className="fixed inset-0 bg-opacity-50 z-30 md:hidden"
                     onClick={() => setIsOpen(false)}
                 ></div>
             )}
-        </>
+        </div>
     );
 };
 
