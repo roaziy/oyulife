@@ -1,10 +1,22 @@
-import Image from "next/image";
-import StorySection from "@/components/homepage/StorySection";
-// import NavBar from "@/components/NavBar/Desktop/NavBar";
+'use client';
 
-import Tinder from "../../public/images/homepage/tinder.jpg"
+import { useState } from 'react';
+import Image from 'next/image';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Tinder from '../../public/images/homepage/tinder.jpg'; // Replace this with your actual image path
 
 export default function Home() {
+  const [current, setCurrent] = useState(0);
+  const images = [Tinder, Tinder, Tinder]; // Replace these with actual different images if needed
+
+  const prevImage = () => {
+    setCurrent(current === 0 ? images.length - 1 : current - 1);
+  };
+
+  const nextImage = () => {
+    setCurrent(current === images.length - 1 ? 0 : current + 1);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-6">
       {/* Left Sidebar */}
@@ -14,70 +26,74 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
-        <div className="top-0 mb-6">
-          <StorySection />
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h1 className="text-[36px] font-bold text-center mb-4">Find your <span className="text-teal-500 text-[36px] font-bold">Oyu</span>-Friend</h1>
-          <div className="absolute left-1/2 justify-center items-center">
-            <Image
-              src={Tinder}
-              alt="Oyu Friend"
-              width={349}
-              height={454}
-              className="rounded-[20px] shadow-xl"
-            />
-          </div>
-          <div className="absolute mt-100 ml-20">
-            <Image
-              src={Tinder}
-              alt="Oyu Friend"
-              width={349}
-              height={454}
-              className="rounded-[20px] shadow-xl"
-            />
-          </div>
-          <div className=" justify-center items-center">
-            <Image
-              src={Tinder}
-              alt="Oyu Friend"
-              width={349}
-              height={454}
-              className="rounded-[20px] shadow-xl"
-            />
-          </div>
-        </div>
+      <div className="flexp-0 mb-6">
+      <div className="bg-white p-6 rounded-lg shadow-md relative flex flex-col items-center">
+        <h1 className="text-3xl font-bold text-center mb-4">
+          Find your <span className="text-teal-500">Oyu</span>-Friend
+        </h1>
 
-        {/* Posts */}
-        <div className="space-y-6">
-          {[1, 2].map((post) => (
-            <div key={post} className="bg-white p-4 rounded-lg shadow-md">
-              <div className="flex items-center gap-4">
-                <Image
-                  src="/images/profiles/story/profile.jpg"
-                  alt="User Profile"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <div>
-                  <p className="font-semibold">Curie.Lisa000</p>
-                  <p className="text-sm text-gray-500">12h</p>
-                </div>
-              </div>
-              <div className="mt-4">
-                <Image
-                  src="/images/posts/sample-post.jpg"
-                  alt="Post Image"
-                  width={600}
-                  height={400}
-                  className="rounded-lg"
-                />
+        <div className="relative w-full max-w-md h-[454px]">
+          {images.map((img, index) => (
+            <Image
+              key={index}
+              src={img}
+              alt={`Oyu Friend ${index}`}
+              width={349}
+              height={454}
+              className={`rounded-[20px] shadow-xl absolute inset-0 transition-transform duration-300 ease-in-out ${
+                index === current
+                  ? 'scale-100 opacity-100 z-20'
+                  : index === (current - 1 + images.length) % images.length
+                  ? '-translate-x-24 scale-90 opacity-50 z-10'
+                  : 'translate-x-24 scale-90 opacity-50 z-10'
+              }`}
+            />
+          ))}
+
+          <button
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+            onClick={prevImage}
+          >
+            <ChevronLeft />
+          </button>
+          <button
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+            onClick={nextImage}
+          >
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
+
+      {/* Posts */}
+      <div className="space-y-6">
+        {[1, 2].map((post) => (
+          <div key={post} className="bg-white p-4 rounded-lg shadow-md">
+            <div className="flex items-center gap-4">
+              <Image
+                src="/images/profiles/story/profile.jpg"
+                alt="User Profile"
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
+              <div>
+                <p className="font-semibold">Curie.Lisa000</p>
+                <p className="text-sm text-gray-500">12h</p>
               </div>
             </div>
-          ))}
-        </div>
+            <div className="mt-4">
+              <Image
+                src="/images/posts/sample-post.jpg"
+                alt="Post Image"
+                width={600}
+                height={400}
+                className="rounded-lg"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
       </div>
 
       {/* Right Sidebar */}
