@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 
 // Access the API key from environment variables
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBc3sLku3nzrx9i__tgsW2Tnm60Tv8wDCk';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+// Check if API key exists
+if (!GEMINI_API_KEY) {
+  console.error('Missing GEMINI_API_KEY environment variable');
+}
 
 export async function POST(request: Request) {
   try {
