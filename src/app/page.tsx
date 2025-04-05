@@ -22,6 +22,7 @@ export default function Home() {
       <div className="flex-1">
         <div className="top-0 mb-6">
           <StorySection />
+          uuganaa
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <h1 className="text-[36px] font-bold text-center mb-4">Find your <span className="text-teal-500 text-[36px] font-bold">Oyu</span>-Friend</h1>
