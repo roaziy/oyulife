@@ -8,7 +8,7 @@ const mockConversations = [
   {
     id: '1',
     name: 'Emma Thompson',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '../../../public/images/profiles/story/profile.jpg',
     lastMessage: 'That sounds great! Let me check my schedule',
     timestamp: new Date(Date.now() - 1000 * 60 * 5),
     unread: 2,
@@ -215,7 +215,7 @@ const Messages: React.FC = () => {
                 className={`flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition ${activeConversation === conv.id ? 'bg-gray-100' : ''}`}
                 onClick={() => setActiveConversation(conv.id)}
               >
-                <div className="relative">
+                <div className="relative flex flex-col-2">
                   <Image 
                     src={conv.avatar} 
                     alt={conv.name}
@@ -226,8 +226,8 @@ const Messages: React.FC = () => {
                   {conv.online && (
                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
-                </div>
-                <div className="ml-4 flex-1">
+                
+                <div className="ml-4 flex-1 mt-[5px]">
                   <div className="flex justify-between items-center">
                     <h3 className="font-semibold text-gray-900">{conv.name}</h3>
                     <span className="text-xs text-gray-500">{conv.timestamp ? formatTime(conv.timestamp) : ''}</span>
@@ -240,6 +240,7 @@ const Messages: React.FC = () => {
                       </span>
                     )}
                   </div>
+                </div>
                 </div>
               </div>
             ))
