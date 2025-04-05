@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  /* --foreground: #171717; */
+}
+
+@font-face {
+  font-family: 'Gilroy-Bold';
+  src: url('../../public/fonts/Gilroy-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy-SemiBold';
+  src: url('../../public/fonts/Gilroy-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy-Medium';
+  src: url('../../public/fonts/Gilroy-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Gilroy-Medium', sans-serif;
+}
+
+.font-bold {
+  font-family: 'Gilroy-Bold', sans-serif;
+}
+.font-semibold {
+  font-family: 'Gilroy-SemiBold', sans-serif;
+}
+.font-medium {
+  font-family: 'Gilroy-Medium', sans-serif;
+}
+
