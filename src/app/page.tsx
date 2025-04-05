@@ -12,11 +12,6 @@ export default function Home() {
         <div className="sticky top-0">
         </div>
       </div>
-      <div className="hidden lg:block w-1/4">
-        <div className="sticky top-0">
-        </div>
-      </div>
-
 
       {/* Main Content */}
       <div className="flex-1">
