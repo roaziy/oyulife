@@ -8,7 +8,7 @@ const mockConversations = [
   {
     id: '1',
     name: 'Emma Thompson',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg', // Fixed path to be absolute from public directory
     lastMessage: 'That sounds great! Let me check my schedule',
     timestamp: new Date(Date.now() - 1000 * 60 * 5),
     unread: 2,
@@ -17,7 +17,7 @@ const mockConversations = [
   {
     id: '2',
     name: 'James Wilson',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Did you see the latest research paper?',
     timestamp: new Date(Date.now() - 1000 * 60 * 30),
     unread: 0,
@@ -26,7 +26,7 @@ const mockConversations = [
   {
     id: '3',
     name: 'Sarah Parker',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Let\'s schedule a call to discuss the project',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
     unread: 0,
@@ -35,7 +35,7 @@ const mockConversations = [
   {
     id: '4',
     name: 'Michael Brown',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'Thanks for sharing your insights!',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
     unread: 0,
@@ -44,7 +44,7 @@ const mockConversations = [
   {
     id: '5',
     name: 'Community Forum',
-    avatar: '/images/DesktopNavbar/user.png',
+    avatar: '/images/profiles/story/profile.jpg',
     lastMessage: 'New topics are available in your field',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48),
     unread: 1,
@@ -183,6 +183,8 @@ const Messages: React.FC = () => {
 
   return (
     <div className="flex h-screen max-h-screen overflow-hidden">
+              <div className="w-[250px] flex flex-col gap-4 py-6 pl-8 ">
+              </div>
       {/* Sidebar - Conversation List */}
       <div className="w-1/4 border-r border-gray-200 flex flex-col bg-white">
         {/* Search Header */}
@@ -213,7 +215,7 @@ const Messages: React.FC = () => {
                 className={`flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition ${activeConversation === conv.id ? 'bg-gray-100' : ''}`}
                 onClick={() => setActiveConversation(conv.id)}
               >
-                <div className="relative">
+                <div className="relative flex w-full flex-col-2">
                   <Image 
                     src={conv.avatar} 
                     alt={conv.name}
@@ -224,8 +226,8 @@ const Messages: React.FC = () => {
                   {conv.online && (
                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
-                </div>
-                <div className="ml-4 flex-1">
+                
+                <div className="ml-4 flex-1 mt-[5px]">
                   <div className="flex justify-between items-center">
                     <h3 className="font-semibold text-gray-900">{conv.name}</h3>
                     <span className="text-xs text-gray-500">{conv.timestamp ? formatTime(conv.timestamp) : ''}</span>
@@ -238,6 +240,7 @@ const Messages: React.FC = () => {
                       </span>
                     )}
                   </div>
+                </div>
                 </div>
               </div>
             ))
@@ -317,10 +320,11 @@ const Messages: React.FC = () => {
             {/* Message Input */}
             <div className="bg-white border-t border-gray-200 p-4">
               <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
-                <div className="relative">
+                <div className="relative z-10">
                   <button 
                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                    className="text-gray-500 hover:text-teal-500 transition"
+                    className="p-2 text-gray-500 hover:text-teal-500 transition cursor-pointer"
+                    type="button"
                   >
                     <Paperclip size={20} />
                   </button>
@@ -354,24 +358,27 @@ const Messages: React.FC = () => {
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
                       handleSendMessage();
                     }
                   }}
+                  autoFocus
                 />
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 z-10">
                   <div className="relative">
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-gray-500 hover:text-teal-500 transition"
+                      className="p-2 text-gray-500 hover:text-teal-500 transition cursor-pointer"
+                      type="button"
                     >
                       <Smile size={20} />
                     </button>
                     
                     {/* Emoji Picker */}
                     {showEmojiPicker && (
-                      <div className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 grid grid-cols-3 gap-2 border">
+                      <div className="absolute bottom-10 right-0 bg-white rounded-lg shadow-lg p-2 px-8 grid grid-cols-3 gap-2 border">
                         {emojis.map((emoji, index) => (
                           <button
                             key={index}
@@ -393,9 +400,10 @@ const Messages: React.FC = () => {
                     className={`p-2 rounded-full ${
                       messageInput.trim() 
                         ? 'bg-teal-500 text-white hover:bg-teal-600' 
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    } transition`}
+                        : 'bg-gray-300 text-gray-500'
+                    } transition cursor-pointer`}
                     disabled={!messageInput.trim()}
+                    type="button"
                   >
                     <Send size={18} />
                   </button>

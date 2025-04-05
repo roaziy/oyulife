@@ -29,13 +29,13 @@ const NavBar = () => {
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <FileText /> AI Assistant
                     </Link>
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/KnowledgeForum" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Bookmark /> Knowledge Forum
                     </Link>
                     <Link href="/community" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Users /> Communities
                     </Link>
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/myNotebook" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                             <Zap /> My notebook
                     </Link>
                     <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
