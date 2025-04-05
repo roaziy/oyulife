@@ -26,7 +26,7 @@ const NavBar = () => {
                     <Link href="/Messages" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <Mail /> Messages
                     </Link>
-                    <Link href="/test" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
+                    <Link href="/ai" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
                         <FileText /> AI Assistant
                     </Link>
                     <Link href="/KnowledgeForum" className="flex items-center gap-3 cursor-pointer hover:text-teal-500 transition">
