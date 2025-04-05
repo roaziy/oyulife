@@ -119,7 +119,20 @@ export default function Home() {
             Find your <span className="text-teal-500">Oyu</span>-Friend
           </h1>
 
-          <div className="relative w-full max-w-md h-[454px]">
+          <button
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+              onClick={prevImage}
+            >
+              <ChevronLeft />
+            </button>
+            <button
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+              onClick={nextImage}
+            >
+              <ChevronRight />
+            </button>
+
+          <div className="relative w-full ml-20 max-w-md h-[454px]">
             {images.map((img, index) => (
               <Image
                 key={index}
@@ -135,19 +148,6 @@ export default function Home() {
                   }`}
               />
             ))}
-
-            <button
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
-              onClick={prevImage}
-            >
-              <ChevronLeft />
-            </button>
-            <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
-              onClick={nextImage}
-            >
-              <ChevronRight />
-            </button>
           </div>
         </div>
         <div className="flex-1 max-w-2xl flex flex-col items-center gap-8">
@@ -253,12 +253,12 @@ export default function Home() {
           <p className="text-gray-500 text-sm">Rating: 2230</p>
           <p className="text-gray-500 text-sm">Top 0.1% of 237844</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-[#EFEFEF] p-4 rounded-lg shadow-md">
           <h2 className="font-bold mb-4">Top Rank</h2>
           <ul className="space-y-3">
             {[1, 2, 3, 4, 5, 6, 7].map((rank) => (
               <li key={rank} className="flex items-center gap-2">
-                <span className="font-bold">N°{rank}</span>
+                <span className="font-bold">NÂ°{rank}</span>
                 <Image
                   src="/images/profiles/story/profile.jpg"
                   alt="Profile"
