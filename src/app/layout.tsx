@@ -33,12 +33,16 @@ function RootLayoutClient({
 
   return (
     <html lang="en">
-      <body>
-        {/* Always show NavBar and children */}
-        <div className="fixed top-0 left-0 w-20%">
+      <body className="flex flex-col md:flex-row">
+        {/* NavBar - fixed on mobile, side column on desktop */}
+        <div className="md:w-0 flex-shrink-0">
           <NavBar />
         </div>
-        <div className="pt-16 ml-20%">{children}</div>
+        
+        {/* Main content - adjusted for navbar position */}
+        <div className="w-full md:ml-64 p-4 mt-16 md:mt-0">
+          {children}
+        </div>
         
         {/* Commented out the login functionality */}
         {/* {isAuthenticated ? (
