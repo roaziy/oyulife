@@ -183,6 +183,8 @@ const Messages: React.FC = () => {
 
   return (
     <div className="flex h-screen max-h-screen overflow-hidden">
+              <div className="w-[250px] flex flex-col gap-4 py-6 pl-8 ">
+              </div>
       {/* Sidebar - Conversation List */}
       <div className="w-1/4 border-r border-gray-200 flex flex-col bg-white">
         {/* Search Header */}
