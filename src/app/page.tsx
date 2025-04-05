@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Tinder from "../../public/images/homepage/tinder.jpg";
+import Tinder from "../../public/images/homepage/tinder.png";
 
 export default function Home() {
   const [current, setCurrent] = useState(0);
@@ -147,10 +147,10 @@ export default function Home() {
               </div>
             </div>
             <Image
-              src="/images/posts/sample-post.jpg"
+              src="/images/post/post1.png"
               alt="Post"
               width={600}
-              height={400}
+              height={300}
               className="rounded-lg"
             />
           </div>
@@ -158,7 +158,7 @@ export default function Home() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-full lg:w-[280px] space-y-6">
+      <div className="w-full lg:w-[280px] space-y-6 sticky top-[20px] h-[calc(100vh-100px)] overflow-y-auto">
         <div className="bg-[#EFEFEF] p-4 rounded-lg shadow-md">
           <h2 className="font-bold mb-2">Your current Rank</h2>
           <p className="text-gray-500 text-sm">Rating: 2230</p>
